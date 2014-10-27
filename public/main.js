@@ -5,6 +5,7 @@ var mainState = {
   preload: function(){
     game.stage.backgroundColor = '#71c5cf';
     game.load.image('bkgrd', 'assets/bkgrd.png');
+    //game.load.spritesheet('whale', 'assets/whale.png', 193, 100, 3);
     game.load.image('whale', 'assets/whale.png');
     game.load.image('rock','assets/rock.png');
     game.load.image('anchor', 'assets/anchor.png');
@@ -34,6 +35,8 @@ var mainState = {
     this.timer = game.time.events.loop(2500, this.addRowOfAnchors, this);
 
     this.whale = this.game.add.sprite(100, 245, 'whale');
+    //this.whale.animations.add('swim');
+    //this.whale.animations.play('swim', 30, true);
 
     game.physics.arcade.enable(this.whale);
     this.whale.body.gravity.y = 1000;
@@ -61,7 +64,7 @@ var mainState = {
   jump: function(){
     if(this.whale.alive === false)
       return;
-    this.whale.body.velocity.y = -300;
+    this.whale.body.velocity.y = -350;
     game.add.tween(this.whale).to({angle: -5}, 100).start();
     this.jumpSound.play();
   },
@@ -76,7 +79,7 @@ var mainState = {
     rock.outOfBoundsKill = true;
   },
   addRowOfRocks: function(){
-    var height = Math.floor(Math.random()*100) +400;
+    var height = Math.floor(Math.random()*100) +350;
      this.addOneRock(500, height);
      this.score += 1;
      this.labelScore.text = this.score;
@@ -89,8 +92,8 @@ var mainState = {
     anchor.outOfBoundsKill = true;
   },
   addRowOfAnchors: function(){
-    //var height = Math.floor(Math.random()*100) - 200;
-    height = 100;
+    var height = Math.floor(Math.random()*100) - 230;
+    //height = -150;
     this.addOneAnchor(500, height);
   },
   hitObstacle: function(){
@@ -100,12 +103,12 @@ var mainState = {
     this.whale.alive = false;
     game.time.events.remove(this.timer);
 
-    this.rocks.forEachAlive(function(p){
-      p.body.velocity.x = 0;
+    this.rocks.forEachAlive(function(r){
+      r.body.velocity.x = 0;
     }, this);
 
-    this.anchors.forEachAlive(function(p){
-      p.body.velocity.x = 0;
+    this.anchors.forEachAlive(function(a){
+      a.body.velocity.x = 0;
     }, this);
   },
   render: function(){
