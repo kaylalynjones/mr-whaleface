@@ -140,4 +140,4 @@ var mainState = {
 
 game.state.add('start', start);
 game.state.add('main', mainState);
-game.state.start('start');
+game.state.start('main');
