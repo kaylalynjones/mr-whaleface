@@ -1,4 +1,4 @@
-var game = new Phaser.Game(550, 685, Phaser.CANVAS, 'gameboard'),
+var game = new Phaser.Game(550, 685, Phaser.AUTO, 'gameboard'),
     hole,
     i;
 var mainState = {
@@ -22,17 +22,16 @@ var mainState = {
     this.rocks.forEach(function(rock){
       rock.body.width = 20;
     });
-    this.timer = game.time.events.loop(2500, this.addRowOfRocks, this);
+    this.timer = game.time.events.loop(2500, this.addObstacle, this);
 
     this.anchors = game.add.group();
     this.anchors.enableBody = true;
     this.anchors.createMultiple(20, 'anchor');
     this.anchors.forEach(function(anchor){
       anchor.body.width = 1;
-      anchor.anchor.setTo(0.5, 0.5);
+      anchor.anchor.setTo(0.5, 1);
 
     });
-    this.timer = game.time.events.loop(2500, this.addRowOfAnchors, this);
 
     this.whale = this.game.add.sprite(100, 245, 'whale');
     //this.whale.animations.add('swim');
@@ -71,30 +70,27 @@ var mainState = {
   restartGame: function(){
     game.state.start('main');
   },
-  addOneRock: function(x,y){
+  addRock: function(x,y){
     var rock = this.rocks.getFirstDead();
     rock.reset(x,y);
     rock.body.velocity.x = -200;
     rock.checkWorldBounds = true;
     rock.outOfBoundsKill = true;
   },
-  addRowOfRocks: function(){
-    var height = Math.floor(Math.random()*100) +350;
-     this.addOneRock(500, height);
-     this.score += 1;
-     this.labelScore.text = this.score;
-  },
-  addOneAnchor: function(x,y){
+  addAnchor: function(x,y){
     var anchor = this.anchors.getFirstDead();
     anchor.reset(x,y);
     anchor.body.velocity.x = -200;
     anchor.checkWorldBounds = true;
     anchor.outOfBoundsKill = true;
   },
-  addRowOfAnchors: function(){
-    var height = Math.floor(Math.random()*100) - 230;
-    //height = -150;
-    this.addOneAnchor(500, height);
+  addObstacle: function(){
+    var height = Math.floor(Math.random()*100) + 400;
+    this.addRock(500, height);
+    this.score += 1;
+    this.labelScore.text = this.score;
+
+    this.addAnchor(500, height - 90);
   },
   hitObstacle: function(){
     if(this.whale.alive === false)
@@ -110,7 +106,7 @@ var mainState = {
     this.anchors.forEachAlive(function(a){
       a.body.velocity.x = 0;
     }, this);
-  },
+  }/*,
   render: function(){
 
     this.anchors.forEach(function(anchor){
@@ -121,7 +117,7 @@ var mainState = {
     });
 
     game.debug.body(this.whale);
-  }
+  }*/
 };
 
 game.state.add('main', mainState);
