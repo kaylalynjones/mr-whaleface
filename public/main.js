@@ -5,19 +5,25 @@ var start = {
     game.load.image('bkgrd', 'assets/bkgrd.png');
     game.load.image('character', 'assets/whale-lrg.png');
     game.load.image('shell', 'assets/shell.png');
+    game.load.image('start', 'assets/start.png');
   },
   create: function(){
     this.background = this.game.add.sprite(0, 0, 'bkgrd');
-    this.character = this.game.add.sprite(90, 200, 'character');
+    this.character = this.game.add.sprite(120, 100, 'character');
+    // this.start = this.game.add.sprite(175, 275, 'start', startGame);
+    this.start = this.game.add.button(175, 275, 'start', startGame);
     this.character.scale.x = 0.7;
     this.character.scale.y = 0.7;
     this.shell = this.game.add.sprite(130, 400, 'shell');
-    this.title = game.add.text(50, 30, 'Mr. Whaleface', {font: '70px Arial', fill: '#ffffff'});
+    this.title = game.add.text(50, 30, 'Mr. Whaleface', {font: '70px Arial', fill: '#eee'});
   },
   update: function(){
-
   }
 };
+
+function startGame(){
+  game.state.start('main');
+}
 //*****************************************************************
 var mainState = {
   preload: function(){
@@ -140,4 +146,4 @@ var mainState = {
 
 game.state.add('start', start);
 game.state.add('main', mainState);
-game.state.start('main');
+game.state.start('start');
