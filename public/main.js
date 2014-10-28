@@ -1,23 +1,44 @@
 var game = new Phaser.Game(550, 685, Phaser.AUTO, 'gameboard');
 
+//  The Google WebFont Loader will look for this object, so create it before loading the script.
+WebFontConfig = {
+
+    //  'active' means all requested fonts have finished loading
+    //  We set a 1 second delay before calling 'createText'.
+    //  For some reason if we don't the browser cannot render the text the first time it's created.
+    active: function() { game.time.events.add(Phaser.Timer.SECOND, createText, this); },
+
+    //  The Google Fonts we want to load (specify as many as you like in the array)
+    google: {
+      families: ['Slackey']
+    }
+
+};
 var start = {
   preload: function(){
+    game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
     game.load.image('bkgrd', 'assets/bkgrd.png');
-    game.load.image('character', 'assets/whale-lrg.png');
+    //game.load.image('character', 'assets/whale-lrg.png');
+    game.load.spritesheet('whale', 'assets/whale-sprite.png', 193, 100);
     game.load.image('shell', 'assets/shell.png');
     game.load.image('start', 'assets/start.png');
   },
   create: function(){
     this.background = this.game.add.sprite(0, 0, 'bkgrd');
-    this.character = this.game.add.sprite(120, 100, 'character');
-    // this.start = this.game.add.sprite(175, 275, 'start', startGame);
+    this.character = this.game.add.sprite(120, 100, 'whale');
+    //this.character = this.game.add.sprite(120, 100, 'character');
+    this.character.animations.add('swim', [1,2,3], 5, true);
+    game.physics.arcade.enable(this.character);
+    this.character.body.velocity.x = 0;
+    this.character.body.velocity.y = 0;
     this.start = this.game.add.button(175, 275, 'start', startGame);
-    this.character.scale.x = 0.7;
-    this.character.scale.y = 0.7;
+    this.character.scale.x = 1.5;
+    this.character.scale.y = 1.5;
     this.shell = this.game.add.sprite(130, 400, 'shell');
-    this.title = game.add.text(50, 30, 'Mr. Whaleface', {font: '70px Arial', fill: '#eee'});
+    this.title = game.add.text(50, 30, 'Mr. Whaleface', {font: '52px Slackey', fill: '#eee'});
   },
   update: function(){
+    this.character.animations.play('swim');
   }
 };
 
@@ -75,7 +96,10 @@ var mainState = {
   },
   update: function(){
     if(this.whale.inWorld === false){
-      this.restartGame();
+      this.splatSound.play();
+      this.whale.alive = false;
+      game.state.start('start');
+
     }
     game.physics.arcade.overlap(this.whale, this.rocks, this.hitObstacle, null, this);
     game.physics.arcade.overlap(this.whale, this.anchors, this.hitObstacle, null, this);
@@ -122,7 +146,7 @@ var mainState = {
     this.splatSound.play();
     this.whale.alive = false;
     game.time.events.remove(this.timer);
-
+    game.state.start('gameover');
     this.rocks.forEachAlive(function(r){
       r.body.velocity.x = 0;
     }, this);
@@ -144,6 +168,40 @@ var mainState = {
   }*/
 };
 
+var gameOver = {
+  preload: function(){
+    game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
+    game.load.image('bkgrd', 'assets/bkgrd.png');
+    game.load.spritesheet('whale', 'assets/whale-sprite.png', 193, 100);
+    game.load.image('shell', 'assets/shell.png');
+    game.load.image('again', 'assets/again.png');
+  },
+  create: function(){
+    this.background = this.game.add.sprite(0, 0, 'bkgrd');
+    this.character = this.game.add.sprite(120, 100, 'whale');
+    //this.character = this.game.add.sprite(120, 100, 'character');
+    this.character.animations.add('swim', [1,2,3], 5, true);
+    game.physics.arcade.enable(this.character);
+    this.character.body.velocity.x = 0;
+    this.character.body.velocity.y = 0;
+    this.start = this.game.add.button(175, 275, 'again', startScreen);
+    this.character.scale.x = 1.5;
+    this.character.scale.y = 1.5;
+    this.shell = this.game.add.sprite(130, 400, 'shell');
+    this.title = game.add.text(50, 30, 'Game Over!', {font: '60px Slackey', fill: '#eee'});
+    this.final = game.add.text(140, 375, 'Your Score:', {font: '30px Slackey', fill: '#eee'});
+    //this.score = game.add.text(375, 370, '0', {font: '40px Slackey', fill: '#eee'});
+  },
+  update: function(){
+    this.character.animations.play('swim');
+  }
+};
+
+function startScreen(){
+  game.state.start('start');
+}
+
 game.state.add('start', start);
 game.state.add('main', mainState);
+game.state.add('gameover', gameOver);
 game.state.start('start');
