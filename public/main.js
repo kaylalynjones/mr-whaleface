@@ -154,7 +154,7 @@ var mainState = {
     this.anchors.forEachAlive(function(a){
       a.body.velocity.x = 0;
     }, this);
-  }/*,
+  },
   render: function(){
 
     this.anchors.forEach(function(anchor){
@@ -165,7 +165,7 @@ var mainState = {
     });
 
     game.debug.body(this.whale);
-  }*/
+  }
 };
 
 var gameOver = {
@@ -189,7 +189,7 @@ var gameOver = {
     this.character.scale.y = 1.5;
     this.shell = this.game.add.sprite(130, 400, 'shell');
     this.title = game.add.text(50, 30, 'Game Over!', {font: '60px Slackey', fill: '#eee'});
-    this.final = game.add.text(140, 375, 'Your Score:', {font: '30px Slackey', fill: '#eee'});
+    //this.final = game.add.text(140, 375, 'Your Score:', {font: '30px Slackey', fill: '#eee'});
     //this.score = game.add.text(375, 370, '0', {font: '40px Slackey', fill: '#eee'});
   },
   update: function(){
