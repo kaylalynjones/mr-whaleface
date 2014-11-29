@@ -1,7 +1,11 @@
 @import url(http://fonts.googleapis.com/css?family=Slackey|Open+Sans);
 
 body {
-  background-color: #bbb;
+  background-color: #1f5da0;
+  background-image: url('assets/page_bkgrd.png');
+  background-repeat: repeat-x;
+  background-size: contain;
+  overflow: auto;
 }
 
 h1, h2, h3 {
@@ -16,19 +20,91 @@ h4, h5, h6, p {
 .aside {
   float: left;
   width: 30%;
-  padding: 0 20px;
-  border: 3px solid rgba(37, 109, 203, 0.84);
+  padding: 20px;
+  border: 3px solid  #C65B7D;
   background-color: #eee;
-  margin-left: 20px;
+  margin-left: 5%;
+  height: 645px;
 }
 
 #gameboard {
   float: right;
   margin-right: 10%;
-  border: 3px solid rgba(37, 109, 203, 0.84);
+  border: 3px solid rgba(11, 40, 77, 0.84);
 }
 
 img{
   display: block;
-  margin: 0 auto;
+  margin: 100px auto;
+  border-radius: 50%;
+  width: 200px;
+  height: 200px;
+  border: 20px solid  #C65B7D;
+
+}
+footer {
+  clear: both;
+  background-color: #1f5da0;
+  background-image: url('assets/bottom_bar.png');
+  background-repeat: repeat-x;
+  background-size: contain;
+  height: 200px;
+}
+
+@media (max-width: 1120px) {
+
+  body {
+    background-image: none;
+  }
+  .aside {
+    width: 50%;
+    margin: 0;
+    border: none;
+    box-sizing: border-box;
+    height: auto;
+  }
+
+  #gameboard {
+    width: 50%;
+    margin: 0 auto;
+    border: none;
+    box-sizing: border-box;
+    padding: 0;
+
+  }
+  canvas {
+    max-width: 500px;
+    width: 100%;
+  }
+  footer, img {
+    display: none;
+  }
+
+}
+@media (max-width: 768px) {
+  h1 {
+    font-size: 26px;
+  }
+  .aside {
+    width: auto;
+    margin: 0;
+    float: none;
+  }
+  img, footer {
+    display: none;
+  }
+
+  #gameboard {
+    margin: 0;
+    padding: 0;
+    max-width: 600px;
+    width: 100%;
+    border: none;
+    float: none;
+    clear: both;
+  }
+  canvas {
+    max-width: 600px;
+    width: 100%;
+  }
 }
